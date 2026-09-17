@@ -23,14 +23,10 @@ track it) next to live Zürich HB departures (open Swiss timetable via
 `transport.opendata.ch`). Both refresh automatically through tiny proxy routes
 at `/api/live/flights` and `/api/live/trains`.
 
-![Manager console](docs/media/console.png)
-
 **Manager console:** KPI hierarchy (one hero number, everything else subordinate),
 trip boards, realtime disruption wire (SSE + polling fallback), and an AI
 copilot that summarizes itineraries and drafts numbered replan steps from live
 trip data — with heuristic fallback when no `OPENAI_API_KEY` is set.
-
-![Mobile web view](docs/media/mobile.png)
 
 ## Quickstart
 
