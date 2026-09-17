@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TripStatus {
+  planning
+  confirmed
+  in_progress
+  completed
+  cancelled
+}
+
+model Trip {
+  id          String     @id @default(cuid())
+  title       String
+  destination String
+  description String     @default("")
+  startDate   DateTime
+  endDate     DateTime
+  status      TripStatus @default(planning)
+  budget      Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  participants Participant[]
+  schedule     ScheduleItem[]
+  hotels       Hotel[]
+  transports   TransportLeg[]
+  documents    TravelDocument[]
+  contacts     Contact[]
+  notes        Note[]
+  updates      TripUpdate[]
+
+  @@index([status])
+  @@index([startDate])
+}
+
+model Participant {
+  id             String @id @default(cuid())
+  tripId         String
+  trip           Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name           String
+  email          String
+  role           String @default("")
+  phone          String @default("")
+  passportNumber String @default("")
+  status         String @default("pending")
+
+  @@index([tripId])
+}
+
+model ScheduleItem {
+  id          String   @id @default(cuid())
+  tripId      String
+  trip        Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  title       String
+  description String   @default("")
+  location    String   @default("")
+  startTime   DateTime
+  endTime     DateTime
+  kind        String   @default("meeting")
+  status      String   @default("scheduled")
+
+  @@index([tripId])
+  @@index([startTime])
+}
+
+model Hotel {
+  id               String @id @default(cuid())
+  tripId           String
+  trip             Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name             String
+  address          String @default("")
+  checkIn          DateTime
+  checkOut         DateTime
+  confirmationCode String @default("")
+  roomType         String @default("")
+  status           String @default("pending")
+
+  @@index([tripId])
+}
+
+model TransportLeg {
+  id            String   @id @default(cuid())
+  tripId        String
+  trip          Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  mode          String
+  provider      String   @default("")
+  from          String
+  to            String
+  departAt      DateTime
+  arriveAt      DateTime
+  referenceCode String   @default("")
+  status        String   @default("reserved")
+
+  @@index([tripId])
+}
+
+model TravelDocument {
+  id        String   @id @default(cuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name      String
+  type      String   @default("other")
+  url       String   @default("")
+  issuedAt  DateTime?
+  expiresAt DateTime?
+
+  @@index([tripId])
+}
+
+model Contact {
+  id           String @id @default(cuid())
+  tripId       String
+  trip         Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name         String
+  organization String @default("")
+  role         String @default("")
+  email        String @default("")
+  phone        String @default("")
+  notes        String @default("")
+
+  @@index([tripId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  author    String   @default("")
+  title     String
+  body      String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([tripId])
+}
+
+model TripUpdate {
+  id        String   @id @default(cuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  message   String
+  severity  String   @default("info")
+  createdAt DateTime @default(now())
+
+  @@index([tripId])
+  @@index([createdAt])
+}

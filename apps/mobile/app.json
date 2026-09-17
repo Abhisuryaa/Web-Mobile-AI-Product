@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "TravelOps Traveler",
+    "slug": "travelops-traveler",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "travelops",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B1D33"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.travelops.traveler"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1D33",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.travelops.traveler",
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router", "expo-notifications"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "apiUrl": "http://localhost:3000",
+      "router": {}
+    }
+  }
+}

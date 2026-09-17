@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-ink-950: #0b0a08;
+  --color-ink-900: #141210;
+  --color-ink-800: #1e1b17;
+  --color-ink-700: #2b2721;
+  --color-ink-line: #2e2a24;
+
+  --color-cream-50: #faf8f4;
+  --color-cream-100: #f3eee5;
+  --color-cream-200: #e7dfd0;
+
+  --color-gold-300: #e9c86a;
+  --color-gold-400: #d9ae3f;
+  --color-gold-500: #c9a227;
+  --color-gold-600: #a16207;
+
+  --color-mist: #a8a29e;
+  --color-parchment: #ede9e3;
+
+  --color-signal-live: #4ade80;
+  --color-signal-warn: #fbbf24;
+  --color-signal-crit: #f87171;
+
+  --font-display: "Newsreader", "Georgia", serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink-950);
+  color: var(--color-parchment);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: rgba(201, 162, 39, 0.25);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(201, 162, 39, 0.85);
+  color: #0b0a08;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-300);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Display type ---- */
+.font-display {
+  font-family: var(--font-display);
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Scroll reveal (human-paced, staggered) ---- */
+.reveal {
+  opacity: 0;
+  translate: 0 26px;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, translate;
+}
+.reveal.is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---- Departure-board ticker ---- */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 46s linear infinite;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+/* ---- Route arcs ---- */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+.route-dash {
+  stroke-dasharray: 6 10;
+  animation: dash-flow 9s linear infinite;
+}
+.route-dash-slow {
+  stroke-dasharray: 3 14;
+  animation: dash-flow 16s linear infinite;
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.06);
+  }
+}
+.ambient-drift {
+  animation: drift 14s ease-in-out infinite;
+}
+
+/* ---- Live pulse (transform + opacity only) ---- */
+@keyframes soft-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: soft-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ---- Sky radar scope ---- */
+.blip {
+  transform: translate(-50%, -50%) translate(var(--dx, 0px), var(--dy, 0px));
+  transition: transform 20s linear;
+  will-change: transform;
+}
+@keyframes radar-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.radar-sweep {
+  animation: radar-spin 5s linear infinite;
+}
+
+/* ---- Film grain (static, decorative) ---- */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ---- Glass panel ---- */
+.glass {
+  background: rgba(20, 18, 16, 0.66);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---- Thin scrollbars for rails ---- */
+.rail-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3a352d transparent;
+}
+.rail-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.rail-scroll::-webkit-scrollbar-thumb {
+  background: #3a352d;
+  border-radius: 9999px;
+}
+
+/* ---- Console (light ops surface) ---- */
+.console-surface {
+  color-scheme: light;
+  background: var(--color-cream-50);
+  color: #1c1917;
+}
+
+/* ---- Reduced motion: still, readable, complete ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+  .ticker-track,
+  .route-dash,
+  .route-dash-slow,
+  .ambient-drift,
+  .radar-sweep,
+  .live-dot::after {
+    animation: none;
+  }
+  .blip {
+    transition: none;
+  }
+}
